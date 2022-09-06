@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "resourcegeodes:xenolith_tile"
+    },
+    "result": "resourcegeodes:xenolith_tile_slab",
+    "count": 2
+}

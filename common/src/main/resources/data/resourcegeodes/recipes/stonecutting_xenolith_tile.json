@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "item": "resourcegeodes:smooth_xenolith"
+    },
+    "result": "resourcegeodes:xenolith_tile",
+    "count": 1
+}

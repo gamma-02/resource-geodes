@@ -1,0 +1,127 @@
+package gamma02.resourcegeodes;
+
+import com.google.common.base.Suppliers;
+import com.ibm.icu.impl.Pair;
+import com.mojang.math.Constants;
+import dev.architectury.event.events.client.ClientLifecycleEvent;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.registry.level.biome.BiomeModifications;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.Registrar;
+import dev.architectury.registry.registries.Registries;
+import dev.architectury.registry.registries.RegistrySupplier;
+import gamma02.resourcegeodes.blocks.BuddingXenolithBlock;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import gamma02.resourcegeodes.blocks.SmoothXenolithBlock;
+import gamma02.resourcegeodes.features.XenolithGeodeFeature;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceLocation;
+
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.material.Material;
+import org.apache.logging.log4j.core.LifeCycle;
+
+import java.security.GeneralSecurityException;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static gamma02.resourcegeodes.RenderTypeStuffPlatformEdition.moreRenderTypeStuffAgh;
+import static net.minecraft.world.level.block.Blocks.AMETHYST_CLUSTER;
+import static net.minecraft.world.level.block.Blocks.OBSIDIAN;
+
+public class ResourceGeodes {
+
+
+    public static final String MOD_ID = "resourcegeodes";
+
+    public static final Supplier<Registries> REGISTRIES = Suppliers.memoize(() -> Registries.get(MOD_ID));
+
+    public static Registrar<Item> ITEMS = REGISTRIES.get().get(Registry.ITEM);
+    public static Registrar<Block> BLOCKS = REGISTRIES.get().get(Registry.BLOCK);
+
+    public static final RegistrySupplier<Block> DIAMOND_CLUSTER = BLOCKS.register(new ResourceLocation(MOD_ID, "diamond_cluster"), () -> new AmethystClusterBlock(7, 3, BlockBehaviour.Properties.of(Material.AMETHYST).noOcclusion().randomTicks().sound(SoundType.AMETHYST_CLUSTER).strength(1.5f).lightLevel(arg -> 5)));
+    public static final RegistrySupplier<Block> LARGE_DIAMOND_BUD = BLOCKS.register(new ResourceLocation(MOD_ID, "large_diamond_bud"), () -> new AmethystClusterBlock(5, 3, BlockBehaviour.Properties.copy(AMETHYST_CLUSTER).sound(SoundType.MEDIUM_AMETHYST_BUD).lightLevel(arg -> 4).noOcclusion()));
+    public static final RegistrySupplier<Block> MEDIUM_DIAMOND_BUD = BLOCKS.register(new ResourceLocation(MOD_ID, "medium_diamond_bud"), () -> new AmethystClusterBlock(4, 3, BlockBehaviour.Properties.copy(AMETHYST_CLUSTER).sound(SoundType.LARGE_AMETHYST_BUD).lightLevel(arg -> 2).noOcclusion()));
+    public static final RegistrySupplier<Block> SMALL_DIAMOND_BUD = BLOCKS.register(new ResourceLocation(MOD_ID, "small_diamond_bud"), () -> new AmethystClusterBlock(3, 4, BlockBehaviour.Properties.copy(AMETHYST_CLUSTER).sound(SoundType.SMALL_AMETHYST_BUD).lightLevel(arg -> 1).noOcclusion()));
+
+    public static final RegistrySupplier<Block> SMOOTH_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "smooth_xenolith"), () -> new SmoothXenolithBlock(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
+    public static final RegistrySupplier<Block> ROUGH_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "rough_xenolith"), () -> new Block(BlockBehaviour.Properties.copy(OBSIDIAN)
+));
+    public static final RegistrySupplier<Block> BUDDING_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "budding_xenolith"), () -> new BuddingXenolithBlock(BlockBehaviour.Properties.copy(OBSIDIAN)));
+
+    public static final RegistrySupplier<Block> XENOLITH_TILE = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile"), () -> new Block(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
+    public static final RegistrySupplier<Block> XENOLITH_TILE_SLAB = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile_slab"), () -> new SlabBlock(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
+    public static final RegistrySupplier<Block> XENOLITH_TILE_STAIRS = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile_stairs"), () -> new StairBlock(XENOLITH_TILE.get().defaultBlockState(), BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, Registry.FEATURE_REGISTRY);
+    public static final Supplier<Feature<GeodeConfiguration>> XENOLITH_FEATURE = FEATURES.register(new ResourceLocation(MOD_ID, "xenolith_feature"), () -> new XenolithGeodeFeature(GeodeConfiguration.CODEC));
+
+    public static final RegistrySupplier<Item> LARGE_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"large_diamond_bud"), () -> new BlockItem(LARGE_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final RegistrySupplier<Item> MEDIUM_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"medium_diamond_bud"), () -> new BlockItem(MEDIUM_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final RegistrySupplier<Item> SMALL_BUD = ITEMS.register(new ResourceLocation(MOD_ID, "small_diamond_bud"), () -> new BlockItem(SMALL_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+    public static final RegistrySupplier<Item> DIAMOND_CLUSTER_ITEM = ITEMS.register(new ResourceLocation(MOD_ID, "diamond_cluster"), () -> new BlockItem(DIAMOND_CLUSTER.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+
+    public static final RegistrySupplier<Item> SMOOTH_XENOLITH_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"smooth_xenolith"), () -> new BlockItem(SMOOTH_XENOLITH.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistrySupplier<Item> ROUGH_XENOLITH_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"rough_xenolith"), () -> new BlockItem(ROUGH_XENOLITH.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistrySupplier<Item> XENOLITH_TILE_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"xenolith_tile"), () -> new BlockItem(XENOLITH_TILE.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistrySupplier<Item> BUDDING_XENOLITH_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"budding_xenolith"), () -> new BlockItem(BUDDING_XENOLITH.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistrySupplier<Item> XENOLITH_TILE_STAIRS_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"xenolith_tile_stairs"), () -> new BlockItem(XENOLITH_TILE_STAIRS.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+    public static final RegistrySupplier<Item> XENOLITH_TILE_SLAB_ITEM = ITEMS.register(new ResourceLocation(MOD_ID, "xenolith_tile_slab"), () -> new BlockItem(XENOLITH_TILE_SLAB.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+
+
+
+
+
+
+
+    public static void init() {
+
+        FEATURES.register();
+        LifecycleEvent.SETUP.register(() ->{
+            GeodesWG.init();
+
+
+        });
+
+
+        ClientLifecycleEvent.CLIENT_SETUP.register(instance -> moreRenderTypeStuffAgh());
+
+
+
+
+        BiomeModifications.addProperties((ctx, mutable) ->{
+            String str = ctx.getKey().orElseGet(() -> new ResourceLocation("air")).toString();
+            if(str.contains("nether".subSequence(0, "nether".length()-1)) || str.contains("end".subSequence(0, "end".length()-1)) && str != "minecraft:air")
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_FEATURE);
+        } );
+
+
+
+
+    }
+
+
+}

@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "##",
+        "##"
+    ],
+    "key": {
+        "#": {
+            "item": "resourcegeodes:smooth_xenolith"
+        }
+    },
+    "result": {
+        "item": "resourcegeodes:xenolith_tile",
+        "count": 4
+    }
+}

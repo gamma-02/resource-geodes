@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "resourcegeodes",
+  "version": "${version}",
+  "name": "Resource Geodes",
+  "description": "adds resource geodes",
+  "authors": [
+    "gamma_02",
+    "xbxbxb123"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "gamma02.resourcegeodes.fabric.ResourceGeodesFabric"
+    ]
+  },
+  "mixins": [
+    "resourcegeodes.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "minecraft": ">=1.19.1"
+  },
+  "accessWidener": "resourcegeodes.aw"
+}

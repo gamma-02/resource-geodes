@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "resourcegeodes:block/diamond_cluster"
+  }
+}

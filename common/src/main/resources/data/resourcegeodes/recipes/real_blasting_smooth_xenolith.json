@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": {
+        "item": "resourcegeodes:rough_xenolith"
+    },
+    "result": "resourcegeodes:smooth_xenolith",
+    "experience": 50,
+    "cookingtime": 200
+}

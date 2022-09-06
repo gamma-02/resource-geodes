@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "resourcegeodes:rough_xenolith",
+    "resourcegeodes:smooth_xenolith",
+    "resourcegeodes:large_diamond_bud",
+    "resourcegeodes:diamond_cluster",
+    "resourcegeodes:medium_diamond_bud",
+    "resourcegeodes:small_diamond_bud",
+    "resourcegeodes:budding_xenolith"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#  ",
+        "## ",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "resourcegeodes:xenolith_tile"
+        }
+    },
+    "result": {
+        "item": "resourcegeodes:xenolith_tile_stairs",
+        "count": 4
+    }
+}

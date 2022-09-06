@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "resourcegeodes:block/xenolith_tile"
+    }
+  }
+}

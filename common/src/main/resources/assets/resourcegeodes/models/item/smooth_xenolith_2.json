@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "resourcegeodes:block/smooth_xenolith_2"
+  }
+}

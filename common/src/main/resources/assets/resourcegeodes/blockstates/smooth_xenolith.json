@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "variant=false": {
+      "model": "resourcegeodes:block/smooth_xenolith_1"
+    },
+    "variant=true": {
+      "model": "resourcegeodes:block/smooth_xenolith_2"
+    }
+  }
+}

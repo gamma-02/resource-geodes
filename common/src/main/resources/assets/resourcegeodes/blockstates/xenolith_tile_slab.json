@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "resourcegeodes:block/tile_xenolith_slab"
+    },
+    "type=double": {
+      "model": "resourcegeodes:block/tile_xenolith"
+    },
+    "type=top": {
+      "model": "resourcegeodes:block/tile_xenolith_slab_top"
+    }
+  }
+}
