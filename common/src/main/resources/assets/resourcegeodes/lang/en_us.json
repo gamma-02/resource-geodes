@@ -1,0 +1,22 @@
+{
+  "block.resourcegeodes.xenolith_tile": "Xenolith Tile",
+  "block.resourcegeodes.xenolith_tile_slab": "Xenolith Tile Slab",
+  "block.resourcegeodes.xenolith_tile_stairs": "Xenolith Tile Stairs",
+  "block.resourcegeodes.smooth_xenolith": "Smooth Xenolith",
+  "block.resourcegeodes.rough_xenolith": "Rough Xenolith",
+  "block.resourcegeodes.budding_xenolith": "Budding Xenolith",
+  "block.resourcegeodes.diamond_cluster": "Diamond Cluster",
+  "block.resourcegeodes.small_diamond_bud": "Small Diamond Bud",
+  "block.resourcegeodes.medium_diamond_bud": "Medium Diamond Bud",
+  "block.resourcegeodes.large_diamond_bud": "Large Diamond Bud",
+  "item.resourcegeodes.xenolith_tile": "Xenolith Tile",
+  "item.resourcegeodes.xenolith_tile_slab": "Xenolith Tile Slab",
+  "item.resourcegeodes.xenolith_tile_stairs": "Xenolith Tile Stairs",
+  "item.resourcegeodes.smooth_xenolith": "Smooth Xenolith",
+  "item.resourcegeodes.rough_xenolith": "Rough Xenolith",
+  "item.resourcegeodes.budding_xenolith": "Budding Xenolith",
+  "item.resourcegeodes.diamond_cluster": "Diamond Cluster",
+  "item.resourcegeodes.small_diamond_bud": "Small Diamond Bud",
+  "item.resourcegeodes.medium_diamond_bud": "Medium Diamond Bud",
+  "item.resourcegeodes.large_diamond_bud": "Large Diamond Bud"
+}

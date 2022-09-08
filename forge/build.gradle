@@ -22,6 +22,11 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 }
+loom{
+    forge{
+        mixinConfig "resourcegeodes-common.mixins.json"
+    }
+}
 
 processResources {
     inputs.property "version", project.version

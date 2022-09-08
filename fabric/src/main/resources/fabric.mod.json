@@ -18,7 +18,8 @@
     ]
   },
   "mixins": [
-    "resourcegeodes.mixins.json"
+    "resourcegeodes.mixins.json",
+    "resourcegeodes-common.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.9",

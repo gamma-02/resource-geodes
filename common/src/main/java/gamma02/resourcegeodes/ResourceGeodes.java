@@ -13,6 +13,8 @@ import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import gamma02.resourcegeodes.blocks.BuddingXenolithBlock;
+import gamma02.resourcegeodes.features.LumpFeatureConfiguration;
+import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import gamma02.resourcegeodes.blocks.SmoothXenolithBlock;
@@ -21,11 +23,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -38,14 +43,17 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.material.Material;
 import org.apache.logging.log4j.core.LifeCycle;
 
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -71,13 +79,16 @@ public class ResourceGeodes {
     public static final RegistrySupplier<Block> SMOOTH_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "smooth_xenolith"), () -> new SmoothXenolithBlock(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
     public static final RegistrySupplier<Block> ROUGH_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "rough_xenolith"), () -> new Block(BlockBehaviour.Properties.copy(OBSIDIAN)
 ));
-    public static final RegistrySupplier<Block> BUDDING_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "budding_xenolith"), () -> new BuddingXenolithBlock(BlockBehaviour.Properties.copy(OBSIDIAN)));
+    public static final RegistrySupplier<Block> BUDDING_XENOLITH = BLOCKS.register(new ResourceLocation(MOD_ID, "budding_xenolith"), () -> new BuddingXenolithBlock(BlockBehaviour.Properties.copy(OBSIDIAN).randomTicks()));
 
     public static final RegistrySupplier<Block> XENOLITH_TILE = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile"), () -> new Block(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
     public static final RegistrySupplier<Block> XENOLITH_TILE_SLAB = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile_slab"), () -> new SlabBlock(BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
     public static final RegistrySupplier<Block> XENOLITH_TILE_STAIRS = BLOCKS.register(new ResourceLocation(MOD_ID, "xenolith_tile_stairs"), () -> new StairBlock(XENOLITH_TILE.get().defaultBlockState(), BlockBehaviour.Properties.copy(OBSIDIAN).strength(100.0f, 2400.0f)));
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(MOD_ID, Registry.FEATURE_REGISTRY);
     public static final Supplier<Feature<GeodeConfiguration>> XENOLITH_FEATURE = FEATURES.register(new ResourceLocation(MOD_ID, "xenolith_feature"), () -> new XenolithGeodeFeature(GeodeConfiguration.CODEC));
+
+    public static final List<BlockPos> GEODES = new ArrayList<>();
+    public static final Supplier<XenolithLumpFeature> XENOLITH_LUMP_FEATURE = FEATURES.register(new ResourceLocation(MOD_ID, "xenolith_lump_feature"), () -> new XenolithLumpFeature(NoneFeatureConfiguration.CODEC));
 
     public static final RegistrySupplier<Item> LARGE_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"large_diamond_bud"), () -> new BlockItem(LARGE_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
     public static final RegistrySupplier<Item> MEDIUM_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"medium_diamond_bud"), () -> new BlockItem(MEDIUM_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
@@ -91,6 +102,8 @@ public class ResourceGeodes {
     public static final RegistrySupplier<Item> XENOLITH_TILE_STAIRS_ITEM = ITEMS.register(new ResourceLocation(MOD_ID,"xenolith_tile_stairs"), () -> new BlockItem(XENOLITH_TILE_STAIRS.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
     public static final RegistrySupplier<Item> XENOLITH_TILE_SLAB_ITEM = ITEMS.register(new ResourceLocation(MOD_ID, "xenolith_tile_slab"), () -> new BlockItem(XENOLITH_TILE_SLAB.get(), new Item.Properties().fireResistant().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
 
+
+    public static boolean isPlaceCommandRegistered = false;
 
 
 
@@ -113,9 +126,10 @@ public class ResourceGeodes {
 
 
         BiomeModifications.addProperties((ctx, mutable) ->{
-            String str = ctx.getKey().orElseGet(() -> new ResourceLocation("air")).toString();
-            if(str.contains("nether".subSequence(0, "nether".length()-1)) || str.contains("end".subSequence(0, "end".length()-1)) && str != "minecraft:air")
-            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_FEATURE);
+//            String str = ctx.getKey().orElseGet(() -> new ResourceLocation("air")).toString();
+//            if(ServerLevel..)
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, GeodesWG.PLACED_XENOLITH_FEATURE);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMP);
         } );
 
 

@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -33,7 +34,7 @@ public class BuddingXenolithBlock extends Block {
     public void randomTick(@NotNull BlockState blockState, @NotNull ServerLevel serverLevel, @NotNull BlockPos blockPos, RandomSource randomSource) {
         int buds = countBuds(blockState, serverLevel, blockPos);
 
-        if (randomSource.nextInt(5 + buds*2) == 0) {
+        if (randomSource.nextInt(GROWTH_CHANCE + buds*2) == 1) {
             Direction direction = DIRECTIONS[randomSource.nextInt(DIRECTIONS.length)];
             BlockPos blockPos2 = blockPos.relative(direction);
             BlockState blockState2 = serverLevel.getBlockState(blockPos2);
@@ -63,7 +64,7 @@ public class BuddingXenolithBlock extends Block {
     public int countBuds(BlockState state, ServerLevel level, BlockPos pos){
         int buds = 0;
         for(Direction dir : DIRECTIONS){
-            if(level.getBlockState(pos.relative(dir)).getBlock() instanceof AmethystClusterBlock)
+            if(level.getBlockState(pos.relative(dir)).getBlock() == ResourceGeodes.SMALL_DIAMOND_BUD.get() || level.getBlockState(pos.relative(dir)).getBlock() == ResourceGeodes.MEDIUM_DIAMOND_BUD.get() || level.getBlockState(pos.relative(dir)).getBlock() == ResourceGeodes.LARGE_DIAMOND_BUD.get() || level.getBlockState(pos.relative(dir)).getBlock() == ResourceGeodes.DIAMOND_CLUSTER.get())
                 buds++;
         }
 

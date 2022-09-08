@@ -7,6 +7,9 @@
     "resourcegeodes:diamond_cluster",
     "resourcegeodes:medium_diamond_bud",
     "resourcegeodes:small_diamond_bud",
-    "resourcegeodes:budding_xenolith"
+    "resourcegeodes:budding_xenolith",
+    "resourcegeodes:xenolith_tile",
+    "resourcegeodes:xenolith_tile_slab",
+    "resourcegeodes:xenolith_tile_stairs"
   ]
 }

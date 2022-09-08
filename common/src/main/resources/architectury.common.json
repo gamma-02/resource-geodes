@@ -1,0 +1,7 @@
+{
+  "injected_interfaces": {
+    "net/minecraft/class_2975": [
+      "gamma02/resourcegeodes/literallyjustthisonething"
+    ]
+  }
+}

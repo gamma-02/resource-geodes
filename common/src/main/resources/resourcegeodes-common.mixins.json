@@ -4,9 +4,11 @@
   "package": "gamma02.resourcegeodes.mixin_common",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ConfiguredFeatureMixin",
+    "PlaceCommandMixin",
+    "WorldGenMixin"
   ],
   "client": [
-    "RenderTypeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

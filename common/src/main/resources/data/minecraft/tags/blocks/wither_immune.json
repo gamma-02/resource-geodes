@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "resourcegeodes:smooth_xenolith",
-    "resourcegeodes:xenolith_tile"
+    "resourcegeodes:xenolith_tile",
+    "resourcegeodes:xenolith_tile_stairs",
+    "resourcegeodes:xenolith_tile_slab"
   ]
 }
