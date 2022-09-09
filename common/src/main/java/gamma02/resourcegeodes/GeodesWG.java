@@ -1,5 +1,6 @@
 package gamma02.resourcegeodes;
 
+import gamma02.resourcegeodes.features.ResourceGeodeConfig;
 import gamma02.resourcegeodes.features.XenolithGeodeFeature;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import net.minecraft.core.Holder;

@@ -9,10 +9,12 @@ import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import gamma02.resourcegeodes.blocks.BuddingXenolithBlock;
+import gamma02.resourcegeodes.features.ResourceGeodeConfig;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import gamma02.resourcegeodes.blocks.SmoothXenolithBlock;
 import gamma02.resourcegeodes.features.XenolithGeodeFeature;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
@@ -21,6 +23,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
@@ -114,6 +117,20 @@ public class ResourceGeodes {
 
 
 
+    }
+
+    public static BlockState budsByLevelAndDirection(int state, Direction dir, List<BlockState> states){
+        return switch (state) {
+            case 1 ->
+                    states.get(1).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+            case 2 ->
+                    states.get(2).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+            case 3 ->
+                    states.get(3).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+            case 4 ->
+                    states.get(4).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+            default -> states.get(5);
+        };
     }
 
 

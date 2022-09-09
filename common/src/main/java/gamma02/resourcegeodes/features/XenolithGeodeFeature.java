@@ -4,12 +4,17 @@ import com.mojang.serialization.Codec;
 import gamma02.resourcegeodes.GeodesWG;
 import gamma02.resourcegeodes.ResourceGeodes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.GeodeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -17,10 +22,11 @@ import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfigurat
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static gamma02.resourcegeodes.ResourceGeodes.GEODES;
 
-public class XenolithGeodeFeature extends GeodeFeature {
+public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
 
 
     public XenolithGeodeFeature(Codec<GeodeConfiguration> codec) {
@@ -43,10 +49,14 @@ public class XenolithGeodeFeature extends GeodeFeature {
 
 
         //for the placement of it
-        double size = Mth.nextDouble(ctx.random(), 5, 7);
+        double size = Mth.nextDouble(ctx.random(), 4, 6);
         size += maximum(random1.getY(), random1.getX(), random1.getZ(), random2.getX(), random2.getY(), random2.getZ());
 
+
+
         BlockPos.MutableBlockPos offsetPos = new BlockPos.MutableBlockPos();
+
+        List<BlockPos> budPoses = new ArrayList<>();
 
         //x iteration
         for(int x = (int) -size; x < size; x++){
@@ -56,18 +66,39 @@ public class XenolithGeodeFeature extends GeodeFeature {
                 for(int z = (int)-size; z < size; z++){
                     BlockPos offset = new BlockPos(x, y, z);
                     offsetPos.setWithOffset(centerPos, offset);
-                    double metaball1 = makeMetaball(BlockPos.ZERO, offsetPos);
-                    double metaball2 = makeMetaball(p1.offset(centerPos.multiply(-1)), offsetPos);
-                    double metaball3 = makeMetaball(p2.offset(centerPos.multiply(-1)), offsetPos);
+
+
+                    double metaball1 = makeMetaball(BlockPos.ZERO, offset);
+                    double metaball2 = makeMetaball(BlockPos.ZERO.offset(random1), offset);
+                    double metaball3 = makeMetaball(BlockPos.ZERO.offset(random2), offset);
                     double metaballs = metaball1+metaball2+metaball3;
+                    double radius = metaballs*size;
 
-                    if(metaballs >= distanceFrom(centerPos, offsetPos)){
+                    if(radius >= distanceFrom(centerPos, offsetPos)){
 
-                        if(distanceFrom(centerPos, offsetPos) > 3.8) {
+                        if(distanceFrom(centerPos, offsetPos) < radius-3) {
 
-                            if (distanceFrom(centerPos, offsetPos) >= 2.5) {
-                                if (!Registry.BLOCK.getKey(ctx.level().getBlockState(offsetPos).getBlock()).toString().contains("diamond"))
+                            if (distanceFrom(centerPos, offsetPos) <= radius-6) {
+                                boolean shouldContinue = false;
+
+                                for(Direction dir : Direction.values()){
+                                    if(ctx.level().getBlockState(offsetPos.immutable().relative(dir.getOpposite())) == ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), offsetPos)){
+                                        int budLevel = ctx.random().nextIntBetweenInclusive(1, 5);
+                                        setBlock(ctx.level(), offsetPos, ResourceGeodes.budsByLevelAndDirection(budLevel, dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
+                                        System.out.println("level: " + budLevel);
+                                        shouldContinue = true;
+
+                                    }
+                                }
+
+                                if(shouldContinue){
+                                    System.out.println("setting bud: " + offsetPos);
+                                }else {
+
                                     setBlock(ctx.level(), offsetPos, Blocks.AIR.defaultBlockState());
+                                }
+
+
                                 continue;
                             }
 
@@ -89,6 +120,8 @@ public class XenolithGeodeFeature extends GeodeFeature {
                 }
             }
         }
+
+
 
 
 
@@ -165,11 +198,18 @@ public class XenolithGeodeFeature extends GeodeFeature {
     }
 
     public int maximum(int... ints){
-        Arrays.stream(ints).forEach((i) -> i = Math.abs(i));
+        for(int i = 0; i < ints.length; i++){
+            ints[i] = Math.abs(ints[i]);
+        }
+
         return Arrays.stream(ints).max().getAsInt();
     }
 
     public double makeMetaball(BlockPos pos, BlockPos offset){
         return 1/Math.sqrt(((pos.getX()-offset.getX())*(pos.getX()-offset.getX()))+((pos.getY()-offset.getY())*(pos.getY()-offset.getY()))+((pos.getZ()-offset.getZ())*(pos.getZ()-offset.getZ())));
     }
+
+
+
+
 }
