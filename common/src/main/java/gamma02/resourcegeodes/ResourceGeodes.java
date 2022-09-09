@@ -1,58 +1,32 @@
 package gamma02.resourcegeodes;
 
 import com.google.common.base.Suppliers;
-import com.ibm.icu.impl.Pair;
-import com.mojang.math.Constants;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
-import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import gamma02.resourcegeodes.blocks.BuddingXenolithBlock;
-import gamma02.resourcegeodes.features.LumpFeatureConfiguration;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import gamma02.resourcegeodes.blocks.SmoothXenolithBlock;
 import gamma02.resourcegeodes.features.XenolithGeodeFeature;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.*;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.presets.WorldPresets;
 import net.minecraft.world.level.material.Material;
-import org.apache.logging.log4j.core.LifeCycle;
 
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -130,6 +104,11 @@ public class ResourceGeodes {
 //            if(ServerLevel..)
             mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, GeodesWG.PLACED_XENOLITH_FEATURE);
             mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMP);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx2);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx3);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx4);
+
+
         } );
 
 

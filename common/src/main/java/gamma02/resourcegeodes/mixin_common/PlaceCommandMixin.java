@@ -29,7 +29,7 @@ public class PlaceCommandMixin {
             ResourceGeodes.isPlaceCommandRegistered = true;
         }else if(holder.equals(GeodesWG.CONFIGURED_XENOLITH_LUMP)){
             ServerLevel serverLevel = commandSourceStack.getLevel();
-            GeodesWG.CONFIGURED_XENOLITH_LUMP.value().placeXenolithLump(blockPos.offset(7, 7, 7), new FeaturePlaceContext<>(Optional.empty(),
+            GeodesWG.CONFIGURED_XENOLITH_LUMP.value().placeXenolithLump(blockPos.offset(11, 11, 11), new FeaturePlaceContext<>(Optional.empty(),
                     serverLevel, serverLevel.getChunkSource().getGenerator(), serverLevel.getRandom(), blockPos, FeatureConfiguration.NONE));
         }
     }

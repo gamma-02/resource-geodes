@@ -34,6 +34,10 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext) {
 
+        if(ResourceGeodes.isPlaceCommandRegistered){
+            ResourceGeodes.isPlaceCommandRegistered = false;
+        }
+
 
         GEODES.add(featurePlaceContext.origin());
 
@@ -89,7 +93,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
                     BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
                     mutablePos.setWithOffset(lumpOrigin, x, y, z);
                     double radIn = distanceFrom(lumpOrigin, mutablePos.immutable());
-                    double radOut = Math.abs(size1)+2- Mth.nextDouble(featurePlaceContext.random(), 1.0, size-1);
+                    //double radOut = Math.abs(size1)+2- Mth.nextDouble(featurePlaceContext.random(), 1.0, size-1);
 
                     //make two metaballs:
                     //this is centered at, well, the center of the lump.

@@ -4,7 +4,11 @@ import com.mojang.serialization.Codec;
 import gamma02.resourcegeodes.GeodesWG;
 import gamma02.resourcegeodes.ResourceGeodes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.GeodeFeature;
@@ -17,57 +21,111 @@ import java.util.*;
 import static gamma02.resourcegeodes.ResourceGeodes.GEODES;
 
 public class XenolithGeodeFeature extends GeodeFeature {
-    public static int MUTABLE_MAGIC_DETECTION_NUMBER = Integer.MAX_VALUE-1885399096;
-    public static int z = 0;
-    public static int currentX = 0;
-    public static final int MAGIC_DETECTION_MUMBER = Integer.MAX_VALUE-1885399096;
 
-    public FeaturePlaceContext<GeodeConfiguration> context;
-    public int size = 0;
 
     public XenolithGeodeFeature(Codec<GeodeConfiguration> codec) {
         super(codec);
     }
 
     @Override
-    public boolean place(@NotNull FeaturePlaceContext<GeodeConfiguration> featurePlaceContext) {
-        boolean bl = super.place(featurePlaceContext);
-        System.out.println("PLACED DIAMOND GEODE: " + featurePlaceContext.origin());
+    public boolean place(@NotNull FeaturePlaceContext<GeodeConfiguration> ctx) {
+        boolean bl = true;
+//        System.out.println("PLACED DIAMOND GEODE: " + ctx.origin());
 
-        this.context = featurePlaceContext;
+        //shortcut for ctx.origin()
+        BlockPos centerPos = ctx.origin();
+        //offset it a little
+        Vec3i random1 = random(ctx.random());
+        BlockPos p1 = ctx.origin().offset(random1);
+        //and again(for metaballs)
+        Vec3i random2 = random(ctx.random());
+        BlockPos p2 = ctx.origin().offset(random2);
+
+
+        //for the placement of it
+        double size = Mth.nextDouble(ctx.random(), 5, 7);
+        size += maximum(random1.getY(), random1.getX(), random1.getZ(), random2.getX(), random2.getY(), random2.getZ());
+
+        BlockPos.MutableBlockPos offsetPos = new BlockPos.MutableBlockPos();
+
+        //x iteration
+        for(int x = (int) -size; x < size; x++){
+            //y iteration
+            for(int y = (int) -size; y < size; y++){
+                //z iteration
+                for(int z = (int)-size; z < size; z++){
+                    BlockPos offset = new BlockPos(x, y, z);
+                    offsetPos.setWithOffset(centerPos, offset);
+                    double metaball1 = makeMetaball(BlockPos.ZERO, offsetPos);
+                    double metaball2 = makeMetaball(p1.offset(centerPos.multiply(-1)), offsetPos);
+                    double metaball3 = makeMetaball(p2.offset(centerPos.multiply(-1)), offsetPos);
+                    double metaballs = metaball1+metaball2+metaball3;
+
+                    if(metaballs >= distanceFrom(centerPos, offsetPos)){
+
+                        if(distanceFrom(centerPos, offsetPos) > 3.8) {
+
+                            if (distanceFrom(centerPos, offsetPos) >= 2.5) {
+                                if (!Registry.BLOCK.getKey(ctx.level().getBlockState(offsetPos).getBlock()).toString().contains("diamond"))
+                                    setBlock(ctx.level(), offsetPos, Blocks.AIR.defaultBlockState());
+                                continue;
+                            }
+
+                            if (ctx.random().nextIntBetweenInclusive(1, 30) == 1) {
+                                setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), offsetPos));
+                            } else {
+                                setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.innerLayerProvider.getState(ctx.random(), offsetPos));
+                            }
+                            continue;
+
+                        }
+
+                        setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.outerLayerProvider.getState(ctx.random(), offsetPos));
+
+
+                    }
+
+
+                }
+            }
+        }
+
+
+
+
 
 
         if(ResourceGeodes.isPlaceCommandRegistered){
             ResourceGeodes.isPlaceCommandRegistered = false;
         }
 
-        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        this.size = featurePlaceContext.random().nextIntBetweenInclusive(25, 45);
-
-        final Metaballs2D noise = new Metaballs2D(RandomSource.create(), 2, 5, 0.2f * size, size*2, size * 0.8f);
-        List<BlockPos> options = new ArrayList<>();
+//        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+//        this.size = ctx.random().nextIntBetweenInclusive(25, 45);
+//
+//        final Metaballs2D noise = new Metaballs2D(RandomSource.create(), 2, 5, 0.2f * size, size*2, size * 0.8f);
+//        List<BlockPos> options = new ArrayList<>();
 //        for (int x = -size; x <= size; x++) {
 //            for (int z = -size; z <= size; z++) {
 //
 //                if (noise.inside(x, z)) {
-//                    mutablePos.setWithOffset(featurePlaceContext.origin().offset((size / featurePlaceContext.random().nextIntBetweenInclusive(4, 7)), 0, -(size / featurePlaceContext.random().nextIntBetweenInclusive(4, 7))), x, 3, z);
-////                        featurePlaceContext.level().getLevel().setBlock(mutablePos, Blocks.AIR.defaultBlockState(), 2);
-//                    if (featurePlaceContext.random().nextIntBetweenInclusive(1, 60) == 10) {//gotta make it nice and rare
+//                    mutablePos.setWithOffset(ctx.origin().offset((size / ctx.random().nextIntBetweenInclusive(4, 7)), 0, -(size / ctx.random().nextIntBetweenInclusive(4, 7))), x, 3, z);
+////                        ctx.level().getLevel().setBlock(mutablePos, Blocks.AIR.defaultBlockState(), 2);
+//                    if (ctx.random().nextIntBetweenInclusive(1, 60) == 10) {//gotta make it nice and rare
 //                        BlockPos lumpOrigin = new BlockPos(mutablePos);
-//                        placeXenolithLump(featurePlaceContext, featurePlaceContext.origin(), lumpOrigin, distanceFrom(featurePlaceContext.origin(), lumpOrigin));
+//                        placeXenolithLump(ctx, ctx.origin(), lumpOrigin, distanceFrom(ctx.origin(), lumpOrigin));
 //                    }
 //                }
 //            }
 //        }
         ArrayList<BlockPos> toSet = new ArrayList<>();
-//        MUTABLE_MAGIC_DETECTION_NUMBER += featurePlaceContext.origin().getY();
-//        z = featurePlaceContext.origin().getZ();
-//        currentX = featurePlaceContext.origin().getX();
-//        setBlock(featurePlaceContext.level(), featurePlaceContext.origin().mutable().setY(MUTABLE_MAGIC_DETECTION_NUMBER), Blocks.AIR.defaultBlockState());
-//        MUTABLE_MAGIC_DETECTION_NUMBER -= featurePlaceContext.origin().getY();
+//        MUTABLE_MAGIC_DETECTION_NUMBER += ctx.origin().getY();
+//        z = ctx.origin().getZ();
+//        currentX = ctx.origin().getX();
+//        setBlock(ctx.level(), ctx.origin().mutable().setY(MUTABLE_MAGIC_DETECTION_NUMBER), Blocks.AIR.defaultBlockState());
+//        MUTABLE_MAGIC_DETECTION_NUMBER -= ctx.origin().getY();
 //        z = 0;
 //        currentX = 0;
-        GEODES.add(featurePlaceContext.origin());
+        GEODES.add(ctx.origin());
 
 
 
@@ -99,5 +157,19 @@ public class XenolithGeodeFeature extends GeodeFeature {
         iter++;
 
         recursiveStuff(featurePlaceContext, noise, size, iter, toSet);
+    }
+
+    public Vec3i random(RandomSource random){
+        return new Vec3i(random.nextIntBetweenInclusive(-3, 3), random.nextIntBetweenInclusive(-3, 3), random.nextIntBetweenInclusive(-3, 3));
+
+    }
+
+    public int maximum(int... ints){
+        Arrays.stream(ints).forEach((i) -> i = Math.abs(i));
+        return Arrays.stream(ints).max().getAsInt();
+    }
+
+    public double makeMetaball(BlockPos pos, BlockPos offset){
+        return 1/Math.sqrt(((pos.getX()-offset.getX())*(pos.getX()-offset.getX()))+((pos.getY()-offset.getY())*(pos.getY()-offset.getY()))+((pos.getZ()-offset.getZ())*(pos.getZ()-offset.getZ())));
     }
 }

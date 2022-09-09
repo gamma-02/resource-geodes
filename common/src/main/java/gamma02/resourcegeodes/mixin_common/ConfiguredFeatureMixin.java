@@ -27,7 +27,6 @@ import java.util.Optional;
 public class ConfiguredFeatureMixin<FC extends FeatureConfiguration, F extends Feature<FC>> implements literallyjustthisonething {
 
     ThreadLocal<BlockPos> geodePos = ThreadLocal.withInitial(() -> BlockPos.ZERO);
-    @Shadow @Final private F feature;
 
 
 
