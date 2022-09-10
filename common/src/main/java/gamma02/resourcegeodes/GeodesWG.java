@@ -28,7 +28,7 @@ import static gamma02.resourcegeodes.ResourceGeodes.*;
 
 public class GeodesWG {
     public static final Holder<ConfiguredFeature<GeodeConfiguration, ?>> CONFIGURED_XENOLITH_FEATURE = configure("configured_xenolith_feature", XENOLITH_FEATURE.get(), new GeodeConfiguration(
-            new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR), BlockStateProvider.simple(ResourceGeodes.ROUGH_XENOLITH.get()), BlockStateProvider.simple(BUDDING_XENOLITH.get()), BlockStateProvider.simple(SMOOTH_XENOLITH.get()), BlockStateProvider.simple(SMOOTH_XENOLITH.get()), List.of(SMALL_DIAMOND_BUD.get().defaultBlockState(), MEDIUM_DIAMOND_BUD.get().defaultBlockState(), MEDIUM_DIAMOND_BUD.get().defaultBlockState(), DIAMOND_CLUSTER.get().defaultBlockState()), BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
+            new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR), BlockStateProvider.simple(ResourceGeodes.ROUGH_XENOLITH.get()), BlockStateProvider.simple(BUDDING_XENOLITH.get()), BlockStateProvider.simple(SMOOTH_XENOLITH.get()), BlockStateProvider.simple(SMOOTH_XENOLITH.get()), List.of(SMALL_DIAMOND_BUD.get().defaultBlockState(), MEDIUM_DIAMOND_BUD.get().defaultBlockState(), LARGE_DIAMOND_BUD.get().defaultBlockState(), DIAMOND_CLUSTER.get().defaultBlockState(), Blocks.AIR.defaultBlockState()), BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
             new GeodeLayerSettings(0.5, 1.3, 2.2, 3.2),
             new GeodeCrackSettings(1d, 0.5, 0),
             0.35, 0.083, true,

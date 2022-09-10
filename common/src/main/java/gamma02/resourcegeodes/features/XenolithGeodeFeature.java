@@ -74,29 +74,13 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
                     double metaballs = metaball1+metaball2+metaball3;
                     double radius = metaballs*size;
 
-                    if(radius >= distanceFrom(centerPos, offsetPos)){
+                    if(radius >= Collections.min(List.of(distanceFrom(centerPos, offsetPos), distanceFrom(p1, offsetPos)-1.2, distanceFrom(p2, offsetPos)-1.2))){
 
                         if(distanceFrom(centerPos, offsetPos) < radius-3) {
 
                             if (distanceFrom(centerPos, offsetPos) <= radius-6) {
-                                boolean shouldContinue = false;
+                                setBlock(ctx.level(), offsetPos, Blocks.AIR.defaultBlockState());
 
-                                for(Direction dir : Direction.values()){
-                                    if(ctx.level().getBlockState(offsetPos.immutable().relative(dir.getOpposite())) == ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), offsetPos)){
-                                        int budLevel = ctx.random().nextIntBetweenInclusive(1, 5);
-                                        setBlock(ctx.level(), offsetPos, ResourceGeodes.budsByLevelAndDirection(budLevel, dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
-                                        System.out.println("level: " + budLevel);
-                                        shouldContinue = true;
-
-                                    }
-                                }
-
-                                if(shouldContinue){
-                                    System.out.println("setting bud: " + offsetPos);
-                                }else {
-
-                                    setBlock(ctx.level(), offsetPos, Blocks.AIR.defaultBlockState());
-                                }
 
 
                                 continue;
@@ -104,6 +88,7 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
 
                             if (ctx.random().nextIntBetweenInclusive(1, 30) == 1) {
                                 setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), offsetPos));
+                                budPoses.add(offsetPos.immutable());
                             } else {
                                 setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.innerLayerProvider.getState(ctx.random(), offsetPos));
                             }
@@ -119,6 +104,21 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
 
                 }
             }
+        }
+        for(BlockPos pos : budPoses){
+            for(Direction dir : Direction.values()){
+
+//                if(ctx.level().getBlockState(pos.immutable().relative(dir.getOpposite())) == ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), pos)){
+//                    int budLevel = ctx.random().nextIntBetweenInclusive(1, 5);
+//                    setBlock(ctx.level(), pos, ResourceGeodes.budsByLevelAndDirection(budLevel, dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
+//                }
+                if(ctx.level().getBlockState(pos.relative(dir)).getBlock() == Blocks.AIR){
+                    setBlock(ctx.level(), pos.relative(dir), ResourceGeodes.budsByLevelAndDirection(ctx.random().nextIntBetweenInclusive(1, 5), dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
+                }
+
+
+            }
+
         }
 
 

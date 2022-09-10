@@ -122,14 +122,14 @@ public class ResourceGeodes {
     public static BlockState budsByLevelAndDirection(int state, Direction dir, List<BlockState> states){
         return switch (state) {
             case 1 ->
-                    states.get(1).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+                    states.get(0).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
             case 2 ->
-                    states.get(2).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+                    states.get(1).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
             case 3 ->
-                    states.get(3).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+                    states.get(2).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
             case 4 ->
-                    states.get(4).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
-            default -> states.get(5);
+                    states.get(3).setValue(AmethystClusterBlock.FACING, dir.getOpposite());
+            default -> states.get(4);
         };
     }
 
