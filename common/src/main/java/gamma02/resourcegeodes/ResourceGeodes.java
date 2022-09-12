@@ -10,6 +10,7 @@ import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import gamma02.resourcegeodes.blocks.BuddingXenolithBlock;
 import gamma02.resourcegeodes.features.ResourceGeodeConfig;
+import gamma02.resourcegeodes.features.SlightlySmallerXenolithLump;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import gamma02.resourcegeodes.blocks.SmoothXenolithBlock;
 import gamma02.resourcegeodes.features.XenolithGeodeFeature;
@@ -66,6 +67,8 @@ public class ResourceGeodes {
 
     public static final List<BlockPos> GEODES = new ArrayList<>();
     public static final Supplier<XenolithLumpFeature> XENOLITH_LUMP_FEATURE = FEATURES.register(new ResourceLocation(MOD_ID, "xenolith_lump_feature"), () -> new XenolithLumpFeature(NoneFeatureConfiguration.CODEC));
+    public static final Supplier<SlightlySmallerXenolithLump> SMALLER_XENOLITH_LUMP_FEATURE = FEATURES.register(new ResourceLocation(MOD_ID, "smaller_xenolith_lump_feature"), () -> new SlightlySmallerXenolithLump(NoneFeatureConfiguration.CODEC));
+
 
     public static final RegistrySupplier<Item> LARGE_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"large_diamond_bud"), () -> new BlockItem(LARGE_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
     public static final RegistrySupplier<Item> MEDIUM_BUD = ITEMS.register(new ResourceLocation(MOD_ID,"medium_diamond_bud"), () -> new BlockItem(MEDIUM_DIAMOND_BUD.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
@@ -108,8 +111,8 @@ public class ResourceGeodes {
             mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, GeodesWG.PLACED_XENOLITH_FEATURE);
             mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMP);
             mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx2);
-            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx3);
-            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.PLACED_XENOLITH_LUMPx4);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.SMALLER_PLACED_XENOLITH_LUMP);
+            mutable.getGenerationProperties().addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, GeodesWG.SMALLER_PLACED_XENOLITH_LUMPx2);
 
 
         } );

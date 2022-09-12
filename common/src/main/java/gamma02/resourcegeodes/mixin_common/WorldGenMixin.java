@@ -4,6 +4,7 @@ import gamma02.resourcegeodes.GeodesWG;
 import gamma02.resourcegeodes.features.Metaballs2D;
 import gamma02.resourcegeodes.features.XenolithGeodeFeature;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
+import gamma02.resourcegeodes.worldGenRegionAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
@@ -26,12 +27,17 @@ import java.util.function.Supplier;
 
 import static gamma02.resourcegeodes.features.XenolithGeodeFeature.distanceFrom;
 
-@Mixin(PlacedFeature.class)
-public abstract class WorldGenMixin {
+@Mixin(WorldGenRegion.class)
+public abstract class WorldGenMixin implements worldGenRegionAccessor {
+    @Shadow @Final private int writeRadiusCutoff;
+
+    @Override
+    public int getWriteRadiusCutoff() {
+        return this.writeRadiusCutoff;
+    }
 
 
-
-//    private boolean recursiveStuff(Metaballs2D noise, int size, int iter, BlockPos geodePos, RandomSource random){
+    //    private boolean recursiveStuff(Metaballs2D noise, int size, int iter, BlockPos geodePos, RandomSource random){
 //        int x = random.nextIntBetweenInclusive(-size, size);
 //        int z = random.nextIntBetweenInclusive(-size, size);
 //

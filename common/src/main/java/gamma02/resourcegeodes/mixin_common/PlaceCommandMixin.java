@@ -27,10 +27,6 @@ public class PlaceCommandMixin {
     private static void mixinFeature(CommandSourceStack commandSourceStack, Holder<ConfiguredFeature<?, ?>> holder, BlockPos blockPos, CallbackInfoReturnable<Integer> cir){
         if(holder.equals(GeodesWG.CONFIGURED_XENOLITH_FEATURE)){
             ResourceGeodes.isPlaceCommandRegistered = true;
-        }else if(holder.equals(GeodesWG.CONFIGURED_XENOLITH_LUMP)){
-            ServerLevel serverLevel = commandSourceStack.getLevel();
-            GeodesWG.CONFIGURED_XENOLITH_LUMP.value().placeXenolithLump(blockPos.offset(11, 11, 11), new FeaturePlaceContext<>(Optional.empty(),
-                    serverLevel, serverLevel.getChunkSource().getGenerator(), serverLevel.getRandom(), blockPos, FeatureConfiguration.NONE));
         }
     }
 }
