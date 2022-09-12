@@ -13,6 +13,7 @@ import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -76,6 +77,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
         int biggerSize = featurePlaceContext.random().nextIntBetweenInclusive(MIN_RADIUS, MAX_RADIUS);
 
         double distance = distanceFrom(geodeOrigin, lumpOrigin);
+        this.distance = distance;
 
         if(distance > biggerSize ){
             return false;
@@ -188,9 +190,13 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
 //                            if (featurePlaceContext.random().nextIntBetweenInclusive(1, 20) == 10) {
 //                                System.out.println("PLACED BLOCK: " + mutablePos);
 //                            }
-                            nameHere.add(mutablePos.immutable());
-                            if(featurePlaceContext.level().getBlockState(mutablePos).getBlock() != Blocks.AIR || featurePlaceContext.level().getBlockState(mutablePos).getBlock() != Blocks.CAVE_AIR || featurePlaceContext.level().getBlockState(mutablePos).getBlock() != Blocks.VOID_AIR)
+                            Block block = featurePlaceContext.level().getBlockState(mutablePos.immutable()).getBlock();
+
+                            if(block != Blocks.AIR && block != Blocks.CAVE_AIR && block != Blocks.VOID_AIR) {
+
                                 amoutNonAir++;
+                            }
+                            nameHere.add(mutablePos.immutable());
                         }
                     }
                 }
@@ -198,6 +204,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
             if(amoutNonAir < 2){
                 return false;
             }
+
             for(BlockPos pos : nameHere){
                 setBlock(featurePlaceContext.level(), pos, ResourceGeodes.SMOOTH_XENOLITH.get().defaultBlockState().setValue(SmoothXenolithBlock.variant, featurePlaceContext.random().nextBoolean()));
 
@@ -237,6 +244,10 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
             return poses;
 
         Vector3d vec = randomVec3D(min, max, skew, bias, rand);
+
+
+
+
         if(!poses.contains(vec) && vec.y > -50)
             poses.add(vec);
 

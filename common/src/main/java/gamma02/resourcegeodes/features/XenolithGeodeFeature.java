@@ -40,9 +40,9 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
         boolean bl = true;
 //        System.out.println("PLACED DIAMOND GEODE: " + ctx.origin());
 
-        if(ctx.random().nextIntBetweenInclusive(1, 5) == 3 && !ResourceGeodes.isPlaceCommandRegistered) {
-            return false;
-        }
+//        if(ctx.random().nextIntBetweenInclusive(1, 5) == 3 && !ResourceGeodes.isPlaceCommandRegistered) {
+//            return false;
+//        }
 
 
 

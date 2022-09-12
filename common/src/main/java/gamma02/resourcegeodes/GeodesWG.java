@@ -42,7 +42,7 @@ public class GeodesWG {
     public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, XenolithLumpFeature>> CONFIGURED_XENOLITH_LUMP = configure("configured_xenolith_lump", XENOLITH_LUMP_FEATURE.get(), FeatureConfiguration.NONE);
     public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, SlightlySmallerXenolithLump>> SMALLER_CONFIGURED_XENOLITH_LUMP = configure("smaller_configured_xenolith_lump", SMALLER_XENOLITH_LUMP_FEATURE.get(), FeatureConfiguration.NONE);
 
-    public static final Holder<PlacedFeature> PLACED_XENOLITH_FEATURE = place("placed_xenolith_feature", CONFIGURED_XENOLITH_FEATURE, List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(-50), VerticalAnchor.absolute(10)), BiomeFilter.biome()));
+    public static final Holder<PlacedFeature> PLACED_XENOLITH_FEATURE = place("placed_xenolith_feature", CONFIGURED_XENOLITH_FEATURE, List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(-50), VerticalAnchor.absolute(10)), BiomeFilter.biome()));
 
     public static final Holder<PlacedFeature> PLACED_XENOLITH_LUMP = PlacementUtils.register("resourcegeodes:placed_xenolith_lump", CONFIGURED_XENOLITH_LUMP, List.of(HeightRangePlacement.uniform(VerticalAnchor.absolute(-50), VerticalAnchor.absolute(10))));
     public static final Holder<PlacedFeature> PLACED_XENOLITH_LUMPx2 = PlacementUtils.register("resourcegeodes:placed_xenolith_lump_2", CONFIGURED_XENOLITH_LUMP, List.of(HeightRangePlacement.uniform(VerticalAnchor.absolute(-50), VerticalAnchor.absolute(10))));
@@ -58,7 +58,7 @@ public class GeodesWG {
         return BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, MOD_ID  + ":" + id, new ConfiguredFeature<>(feature, featureConfiguration));
     }
     public static Holder<PlacedFeature> place(String string, Holder<? extends ConfiguredFeature<?, ?>> holder, List<PlacementModifier> list) {
-        return PlacementUtils.register(string, holder, RarityFilter.onAverageOnceEvery(50), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(-50), VerticalAnchor.absolute(10)), BiomeFilter.biome());
+        return PlacementUtils.register(string, holder, list);
     }
 
     public static void init(){
