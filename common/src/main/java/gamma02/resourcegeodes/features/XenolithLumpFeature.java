@@ -11,7 +11,6 @@ import net.minecraft.core.SectionPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -74,7 +73,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
 
 
         BlockPos lumpOrigin = featurePlaceContext.origin();
-        int biggerSize = featurePlaceContext.random().nextIntBetweenInclusive(MIN_RADIUS, MAX_RADIUS);
+        int biggerSize = Mth.randomBetweenInclusive(featurePlaceContext.random(), MIN_RADIUS, MAX_RADIUS);
 
         double distance = distanceFrom(geodeOrigin, lumpOrigin);
         this.distance = distance;
@@ -92,7 +91,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
         double y1 = featurePlaceContext.origin().getY();
 
         int amountBase = (Math.max(Mth.floor(distance + 1.1 * (8 - distance)), 2))*5;
-        int amountRandom = featurePlaceContext.random().nextIntBetweenInclusive(amountBase-2, amountBase);
+        int amountRandom = Mth.randomBetweenInclusive(featurePlaceContext.random(), amountBase-2, amountBase);
 
         int radius = 15;
         boolean placedAll = false;
@@ -126,7 +125,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
 
 
 
-//        if(!placedAll && featurePlaceContext.random().nextIntBetweenInclusive(1, 20) == 10){
+//        if(!placedAll && Mth.randomBetweenInclusive(featurePlaceContext.random(), 1, 20) == 10){
 //            System.out.println("PLACED: " + lumpOrigin.getX() + " " + lumpOrigin.getY() + " " + lumpOrigin.getZ());
 //            System.out.println("AMOUNT: " + amountRandom + " DISTANCE: " + distance + " SIZE: " + biggerSize);
 //        }
@@ -187,7 +186,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
                         double metaballTwo = 1 / Math.sqrt(((-x + random(featurePlaceContext)) * (-x + random(featurePlaceContext))) + ((-y + random(featurePlaceContext)) * (-y + random(featurePlaceContext))) + ((-z + random(featurePlaceContext)) * (-z + random(featurePlaceContext))));
 
                         if ((radIn <= metaballTwo + metaballOne) && featurePlaceContext.level().ensureCanWrite(mutablePos.immutable())) {
-//                            if (featurePlaceContext.random().nextIntBetweenInclusive(1, 20) == 10) {
+//                            if (Mth.randomBetweenInclusive(featurePlaceContext.random(), 1, 20) == 10) {
 //                                System.out.println("PLACED BLOCK: " + mutablePos);
 //                            }
                             Block block = featurePlaceContext.level().getBlockState(mutablePos.immutable()).getBlock();
@@ -224,7 +223,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
      * @param rand random
      * @return skewed random
      */
-    public static double nextSkewedBoundedDouble(double min, double max, double skew, double bias, RandomSource rand) {
+    public static double nextSkewedBoundedDouble(double min, double max, double skew, double bias, Random rand) {
         double range = max - min;
         double mid = min + range / 2.0;
         double unitGaussian = rand.nextGaussian();
@@ -233,13 +232,13 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
         return retval;
     }
 
-    public static List<Vector3d> nextSkewedBoundedVec3DsNoDuplicates(double min, double max, BlockPos skew, double bias, RandomSource rand, int amount ){
+    public static List<Vector3d> nextSkewedBoundedVec3DsNoDuplicates(double min, double max, BlockPos skew, double bias, Random rand, int amount ){
 
         return nextSkewedBoundedVec3DsNoDuplicatesRecursive(min, max, skew, bias, rand, amount, new ArrayList<Vector3d>());
 
     }
 
-    private static List<Vector3d> nextSkewedBoundedVec3DsNoDuplicatesRecursive(double min, double max, BlockPos skew, double bias, RandomSource rand, int amount, List<Vector3d> poses){
+    private static List<Vector3d> nextSkewedBoundedVec3DsNoDuplicatesRecursive(double min, double max, BlockPos skew, double bias, Random rand, int amount, List<Vector3d> poses){
         if(poses.size()+1 >= amount)
             return poses;
 
@@ -258,7 +257,7 @@ public class XenolithLumpFeature extends Feature<NoneFeatureConfiguration> {
     }
 
 
-    public static Vector3d randomVec3D(double min, double max, BlockPos skew, double bias, RandomSource rand){
+    public static Vector3d randomVec3D(double min, double max, BlockPos skew, double bias, Random rand){
         return new Vector3d(nextSkewedBoundedDouble(min, max, skew.getX(), bias, rand), nextSkewedBoundedDouble(min, max, skew.getY(), bias, rand), nextSkewedBoundedDouble(min, max, skew.getZ(), bias, rand));
     }
 

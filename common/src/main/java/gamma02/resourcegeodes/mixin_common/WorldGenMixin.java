@@ -1,29 +1,10 @@
 package gamma02.resourcegeodes.mixin_common;
 
-import gamma02.resourcegeodes.GeodesWG;
-import gamma02.resourcegeodes.features.Metaballs2D;
-import gamma02.resourcegeodes.features.XenolithGeodeFeature;
-import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import gamma02.resourcegeodes.worldGenRegionAccessor;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
-import java.util.function.Supplier;
 
 import static gamma02.resourcegeodes.features.XenolithGeodeFeature.distanceFrom;
 

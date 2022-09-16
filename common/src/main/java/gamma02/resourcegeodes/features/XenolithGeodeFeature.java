@@ -10,7 +10,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
+
 import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -40,7 +40,7 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
         boolean bl = true;
 //        System.out.println("PLACED DIAMOND GEODE: " + ctx.origin());
 
-//        if(ctx.random().nextIntBetweenInclusive(1, 5) == 3 && !ResourceGeodes.isPlaceCommandRegistered) {
+//        if(Mth.randomBetweenInclusive(ctx.random(), 1, 5) == 3 && !ResourceGeodes.isPlaceCommandRegistered) {
 //            return false;
 //        }
 
@@ -121,7 +121,7 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
                     continue;
                 }
 
-                if (ctx.random().nextIntBetweenInclusive(1, 17) == 9) {
+                if (Mth.randomBetweenInclusive(ctx.random(), 1, 17) == 9) {
                     setBlock(ctx.level(), offsetPos, ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), offsetPos));
                     budPoses.add(offsetPos.immutable());
                 } else {
@@ -147,11 +147,11 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
             for(Direction dir : Direction.values()){
 
 //                if(ctx.level().getBlockState(pos.immutable().relative(dir.getOpposite())) == ctx.config().geodeBlockSettings.alternateInnerLayerProvider.getState(ctx.random(), pos)){
-//                    int budLevel = ctx.random().nextIntBetweenInclusive(1, 5);
+//                    int budLevel = Mth.randomBetweenInclusive(ctx.random(), 1, 5);
 //                    setBlock(ctx.level(), pos, ResourceGeodes.budsByLevelAndDirection(budLevel, dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
 //                }
                 if(ctx.level().getBlockState(pos.relative(dir)).getBlock() == Blocks.AIR){
-                    setBlock(ctx.level(), pos.relative(dir), ResourceGeodes.budsByLevelAndDirection(ctx.random().nextIntBetweenInclusive(1, 5), dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
+                    setBlock(ctx.level(), pos.relative(dir), ResourceGeodes.budsByLevelAndDirection(Mth.randomBetweenInclusive(ctx.random(), 1, 5), dir.getOpposite(), ctx.config().geodeBlockSettings.innerPlacements));
                 }
 
 
@@ -171,7 +171,7 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
         }
 
 //        final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-//        this.size = ctx.random().nextIntBetweenInclusive(25, 45);
+//        this.size = Mth.randomBetweenInclusive(ctx.random(), 25, 45);
 //
 //        final Metaballs2D noise = new Metaballs2D(RandomSource.create(), 2, 5, 0.2f * size, size*2, size * 0.8f);
 //        List<BlockPos> options = new ArrayList<>();
@@ -179,9 +179,9 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
 //            for (int z = -size; z <= size; z++) {
 //
 //                if (noise.inside(x, z)) {
-//                    mutablePos.setWithOffset(ctx.origin().offset((size / ctx.random().nextIntBetweenInclusive(4, 7)), 0, -(size / ctx.random().nextIntBetweenInclusive(4, 7))), x, 3, z);
+//                    mutablePos.setWithOffset(ctx.origin().offset((size / Mth.randomBetweenInclusive(ctx.random(), 4, 7)), 0, -(size / Mth.randomBetweenInclusive(ctx.random(), 4, 7))), x, 3, z);
 ////                        ctx.level().getLevel().setBlock(mutablePos, Blocks.AIR.defaultBlockState(), 2);
-//                    if (ctx.random().nextIntBetweenInclusive(1, 60) == 10) {//gotta make it nice and rare
+//                    if (Mth.randomBetweenInclusive(ctx.random(), 1, 60) == 10) {//gotta make it nice and rare
 //                        BlockPos lumpOrigin = new BlockPos(mutablePos);
 //                        placeXenolithLump(ctx, ctx.origin(), lumpOrigin, distanceFrom(ctx.origin(), lumpOrigin));
 //                    }
@@ -221,24 +221,10 @@ public class XenolithGeodeFeature extends Feature<GeodeConfiguration> {
         return Math.sqrt(distance1x + distance1y + distance1z);//take the root of them all
     }
 
-    public void recursiveStuff(FeaturePlaceContext<GeodeConfiguration> featurePlaceContext, Metaballs2D noise, int size, int iter, ArrayList<BlockPos> toSet){
-        int x = featurePlaceContext.random().nextIntBetweenInclusive(-size, size);
-        int z = featurePlaceContext.random().nextIntBetweenInclusive(-size, size);
 
-        if(noise.inside(x, z)){
-            BlockPos pos = new BlockPos(x, featurePlaceContext.origin().getY(), z).offset(featurePlaceContext.origin().getX(), 0, featurePlaceContext.origin().getZ());
-            if(distanceFrom(featurePlaceContext.origin(), pos) > 10) {
-//                p(featurePlaceContext, featurePlaceContext.origin(), pos, distanceFrom(featurePlaceContext.origin(), pos), toSet);
-                return;
-            }
-        }
-        iter++;
 
-        recursiveStuff(featurePlaceContext, noise, size, iter, toSet);
-    }
-
-    public Vec3i random(RandomSource random){
-        return new Vec3i(random.nextIntBetweenInclusive(-3, 3), random.nextIntBetweenInclusive(-3, 3), random.nextIntBetweenInclusive(-3, 3));
+    public Vec3i random(Random random){
+        return new Vec3i(Mth.randomBetweenInclusive(random, -3, 3), Mth.randomBetweenInclusive(random, -3, 3), Mth.randomBetweenInclusive(random, -3, 3));
 
     }
 

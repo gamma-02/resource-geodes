@@ -5,7 +5,6 @@ import gamma02.resourcegeodes.features.XenolithGeodeFeature;
 import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import gamma02.resourcegeodes.literallyjustthisonething;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;

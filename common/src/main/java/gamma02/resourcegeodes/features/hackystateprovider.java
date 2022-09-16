@@ -1,10 +1,13 @@
 package gamma02.resourcegeodes.features;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
+
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+
+import java.util.Random;
 
 public class hackystateprovider extends BlockStateProvider {
 
@@ -20,7 +23,7 @@ public class hackystateprovider extends BlockStateProvider {
     }
 
     @Override
-    public BlockState getState(RandomSource randomSource, BlockPos blockPos) {
+    public BlockState getState(Random randomSource, BlockPos blockPos) {
         return null;
     }
 }
