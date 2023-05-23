@@ -1,11 +1,9 @@
 package gamma02.resourcegeodes.fabric;
 
-import com.ibm.icu.impl.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.level.block.Block;
 
 import static gamma02.resourcegeodes.ResourceGeodes.*;
 

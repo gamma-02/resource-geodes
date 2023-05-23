@@ -3,6 +3,7 @@ package gamma02.resourcegeodes;
 import com.google.common.base.Suppliers;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
+import dev.architectury.platform.Platform;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
@@ -93,11 +94,9 @@ public class ResourceGeodes {
     public static void init() {
 
         FEATURES.register();
-        LifecycleEvent.SETUP.register(() ->{
-            GeodesWG.init();
+        if(!Platform.isForge())
+            LifecycleEvent.SETUP.register(GeodesWG::init);
 
-
-        });
 
 
         ClientLifecycleEvent.CLIENT_SETUP.register(instance -> moreRenderTypeStuffAgh());

@@ -13,6 +13,7 @@ public class ResourceGeodesForge {
         // Submit our event bus to let architectury register our content on the right time
         EventBuses.registerModEventBus(ResourceGeodes.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         ResourceGeodes.init();
+
     }
 
 

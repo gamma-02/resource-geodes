@@ -6,6 +6,7 @@ import gamma02.resourcegeodes.features.XenolithLumpFeature;
 import net.minecraft.core.Holder;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -63,5 +64,8 @@ public class GeodesWG {
 
     public static void init(){
 
+    }
+
+    public static void init(MinecraftServer minecraftServer) {
     }
 }
